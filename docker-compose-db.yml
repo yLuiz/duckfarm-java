@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15.3
+    container_name: postgresdb
+    environment:
+      POSTGRES_USER: luiz
+      POSTGRES_PASSWORD: luiz-2024
+      POSTGRES_DB: duckfarm
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
