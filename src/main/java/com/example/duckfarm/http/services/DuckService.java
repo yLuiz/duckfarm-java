@@ -1,5 +1,8 @@
 package com.example.duckfarm.http.services;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +71,80 @@ public class DuckService {
         Page<Duck> ducks = duckRepository.findAllPage(pageRequest);
 
         return ducks;
+    }
+
+    public Duck update(Long id, CreateDuckDTO payload) {
+        try {
+            Duck duck = findById(id);
+
+            if (duck == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pato não foi encontrado.");
+            }
+
+            Boolean customerNotNull = payload.getCustomer_id() != null;
+            Boolean sameCustomer = customerNotNull && Objects.equals(duck.getCustomer().getId(), payload.getCustomer_id());
+
+            /* Customer */
+            if (customerNotNull) {
+                duck.setCustomer(sameCustomer ? duck.getCustomer() : customerService.findById(payload.getCustomer_id()));
+            }
+
+            /* Mother */
+            Long motherId = duck.getMother() == null ? null : duck.getMother().getId();
+            Boolean motherNotNull = payload.getMother_id() != null;
+            Boolean sameMother = motherNotNull && Objects.equals(motherId, payload.getMother_id());
+            Boolean isHerself = Objects.equals(duck.getId(), payload.getMother_id());
+
+            if (isHerself) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A mãe pata não pode ser si mesmo.");
+            }
+
+            List<Long> childIds = new ArrayList<>();
+            for (Duck child : duck.getChildren()) {
+                childIds.add(child.getId());
+            }
+
+            if (motherNotNull && childIds.contains(payload.getMother_id())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A mãe pata não pode ser um de seus filhos.");
+            }
+
+            if (sameMother) {
+                duck.setMother(duck.getMother());
+            } else if (motherNotNull) {
+
+                Optional<Duck> duckMother = duckRepository.findById(payload.getMother_id());
+                if (duckMother.orElse(null) == null) {
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Mãe pata não foi encontrada.");
+                }
+
+                duck.setMother(duckMother.get());
+            }
+
+            duck.setName(payload.getName() == null ? duck.getName() : payload.getName());
+            duck.setPrice(payload.getPrice() == null ? duck.getPrice() : payload.getPrice());
+
+            return duckRepository.save(duck);
+
+        } catch (ResponseStatusException e) {
+            throw new ResponseStatusException(e.getStatusCode(), e.getReason());
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+
+    }
+
+    public Duck patchMotherToNull(Long id) {
+        Duck duck = findById(id);
+
+        if (duck == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pato não foi encontrado.");
+        }
+
+        duck.setMother(null);
+
+        duckRepository.save(duck);
+
+        return duck;
     }
 
     public Duck deleteById(Long id) {
