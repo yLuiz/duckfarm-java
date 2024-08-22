@@ -1,11 +1,14 @@
 package com.example.duckfarm.db.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,14 +28,16 @@ public class Purchase {
     private Long id;
 
     @Schema(example = "1", required = true)
-    @Column
-    private Long duck_id;
+    @JoinColumn(name = "duck_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    private Duck duck;
     
     @Schema(example = "209.90", required = true)
     @Column
     private Double price;
     
     @Schema(example = "1", required = true)
-    @Column
-    private Long customer_id;    
+    @JoinColumn(name = "customer_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    private Customer customer;    
 }
