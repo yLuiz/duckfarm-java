@@ -1,64 +1,25 @@
-# IBBI E-commerce
+# Duck Farm
 
-Sistema com fluxo de E-commerce, sugerido como teste técnico pelo IBBI
-
-Acesse: https://ibbi-ecommerce.vercel.app/
-Documentação API (Swagger): https://ibbi-ecommerce-production.up.railway.app/api
+Sistema com fluxo de Vendas de patos, sugerido como teste técnico pelo Preço Justo
 
 # 🗃 Baixando o repositório
 Para baixar e executar o sistema, faça download com os seguintes comandos:
 
 ``` bash
-    git clone -b main https://github.com/yLuiz/ibbi-ecommerce.git
-    cd ./ibbi-ecommerce
+    git clone -b main https://github.com/yLuiz/duckfarm-java.git
+    cd ./duckfarm-java
 ```
-
-# 🖼 Front-end
-
-## 💻 Tecnologias
-* Angular (v17+)
-* PrimeNG (v17)
-* Node.js (v20.16.0)
-* Typescript (v5.4.2)
-
-## ⚙ Configuração
-Para conseguir rodar o Front-end, você precisa ter instalado o Node.js e Angular 17.x.
-Após isso, clone o repositório e entre na pasta `./frontend` e execute o seguinte comando para instalar as dependências do projeto:
-
-``` bash
-$ npm install
-```
-* Obs: Vale lembrar que o Backend precisa está configurado e ligado para a aplicação funcionar
-
-## 🚀 Executando (Sem o Docker)
-Após a instalação das dependências, execute o seguinte comando:
-
-``` bash
-$ npm start
-```
-
-## 🚀 Executando (Com o Docker)
-Caso não queira ter problemas com ambiente, rode os seguintes comando docker:
-
-``` bash
-$ docker-compose build
-$ docker-compose up -d
-```
-
-Depois é só acessar em sua máquina o seguinte endereço: `http://localhost:4200/`
 
 # 📡 Back-end
 
 # 💻 Tecnologias
-* Node.js (v20.16.0)
-* Nest.js (v10)
-* PrismaORM (v5.17.0)
-* * Typescript (v5.4.2)
-* MySQL 8
+* Java (v17.0)
+* Spring Boot (v3.0.0)
+* PostgreSQL (v15.3)
 
 ## ⚙ Configuração
 Para conseguir rodar o Backe-end, você precisa ter instalado o Node.js na versão 20.16.0 em sua máquina.
-Após isso, clone o repositório e entre na pasta `./backend` e execute os seguintes passos:
+Após isso, clone o repositório e execute os seguintes passos:
 
 # Banco de dados 🎲
 - Primeiramente, você precisa ter o banco de dados MySQL, caso queira subir em um docker, execute o seguinte comando:
