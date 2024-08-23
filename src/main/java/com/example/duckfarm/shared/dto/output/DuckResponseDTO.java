@@ -1,26 +1,39 @@
 package com.example.duckfarm.shared.dto.output;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.example.duckfarm.db.model.Duck;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class DuckResponseDTO extends Duck {
+public final class DuckResponseDTO extends Duck {
 
     public DuckResponseDTO(Duck duck) {
         setId(duck.getId());
         setName(duck.getName());
         setPrice(duck.getPrice());
-        setChildren(duck.getChildren());
-        mother_id = duck.getMother() != null ? duck.getMother().getId() : null;
+        setDuck_children(duck.getChildren().isEmpty() ? null : duck.getChildren());
+        setMotherWithoutCustomer(duck.getMother());
+        setCustomer(duck.getCustomer());
     }
 
-    private Long mother_id = null;
+    public void setMotherWithoutCustomer(Duck mother) {
+        if (mother == null) {
+            setDuck_mother(mother);
+            return;
+        }
+
+        Duck currentMother = new Duck(mother);
+
+        currentMother.setCustomer(null);
+        setDuck_mother(currentMother);
+    }
+
+    private Duck duck_mother = null;
+    private Set<Duck> duck_children = new HashSet<>();
 }
