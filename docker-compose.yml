@@ -11,8 +11,8 @@ services:
       - postgres
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/duckfarm
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_DATASOURCE_USERNAME=luiz
+      - SPRING_DATASOURCE_PASSWORD=luiz-2024
 
   postgres:
     image: postgres:13
