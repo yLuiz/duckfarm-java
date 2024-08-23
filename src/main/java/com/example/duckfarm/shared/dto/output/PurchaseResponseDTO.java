@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -18,7 +17,9 @@ public class PurchaseResponseDTO extends Purchase {
 
     public PurchaseResponseDTO(Purchase purchase) {
         setId(purchase.getId());
-        this.setPrice(purchase.getPrice());
+        setPrice(purchase.getPrice());
+        setCreated_at(purchase.getCreated_at());
+
         this.purchase_duck = purchase.getDuck();
         this.purchase_customer = purchase.getCustomer();
 

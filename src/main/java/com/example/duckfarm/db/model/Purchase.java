@@ -1,5 +1,7 @@
 package com.example.duckfarm.db.model;
 
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -41,14 +43,17 @@ public class Purchase {
     @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnore
     private Duck duck;
-    
+
     @Schema(example = "209.90", required = true)
     @Column
     private Double price;
-    
+
     @Schema(example = "1", required = true)
     @JoinColumn(name = "customer_id")
     @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnore
-    private Customer customer;    
+    private Customer customer;
+
+    @Column
+    private Date created_at;
 }

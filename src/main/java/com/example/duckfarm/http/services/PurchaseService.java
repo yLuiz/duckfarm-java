@@ -1,5 +1,6 @@
 package com.example.duckfarm.http.services;
 
+import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -54,6 +55,7 @@ public class PurchaseService {
 
             purchase.setCustomer(customer);
             purchase.setDuck(duck);
+            purchase.setCreated_at(new Date());
             Purchase newPurchase = purchaseRepository.save(purchase);
 
             if (newPurchase != null) {
