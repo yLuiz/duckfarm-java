@@ -71,7 +71,7 @@ public class Duck {
     private Duck mother;
 
     @Schema(example = "[]")
-    @OneToMany(mappedBy = "mother", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "mother", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonIgnore
     private Set<Duck> children = new HashSet<>();
 

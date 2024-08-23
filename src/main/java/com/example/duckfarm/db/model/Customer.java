@@ -3,6 +3,7 @@ package com.example.duckfarm.db.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.example.duckfarm.shared.dto.input.CreateCustomerDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -31,6 +32,23 @@ import lombok.Setter;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
 public class Customer {
 
+    public Customer (CreateCustomerDTO createCustomerDTO) {
+        this.name = createCustomerDTO.getName();
+        this.email = createCustomerDTO.getEmail();
+        this.password = createCustomerDTO.getPassword();
+        this.has_discount = createCustomerDTO.getHas_discount();
+    }
+
+    public Customer (Customer body) {
+        this.id = body.getId();
+        this.name = body.getName();
+        this.email = body.getEmail();
+        this.password = body.getPassword();
+        this.has_discount = body.getHas_discount();
+        this.ducks = body.getDucks();
+        this.purchase = body.getPurchase();
+    }
+
     @Schema(example = "1", required = true)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,7 +71,7 @@ public class Customer {
     @Column
     private Integer has_discount;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonIgnore
     Set<Duck> ducks = new HashSet<>();
 

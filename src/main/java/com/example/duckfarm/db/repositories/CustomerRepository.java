@@ -15,4 +15,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     @Query("SELECT c FROM Customer c")
     public @NonNull
     Page<Customer> findAllPage(@NonNull Pageable page);
+
+    @Query("SELECT c FROM Customer c WHERE c.email = ?1")
+    Customer findByEmail(String email);
 }
