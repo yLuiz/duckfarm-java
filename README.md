@@ -47,7 +47,7 @@ Após isso, clone o repositório e execute os seguintes passos:
     DB_PASSWORD=your_password
 ```
 
-*Obs: Caso não tenha o docker, certifique de baixar e fazer a instação do PostgreSQL 13.
+*Obs: Caso não tenha o docker, certifique de baixar e fazer a instalação do PostgreSQL 13.
 
 - Agora, vale lembrar que para seguir os próximos passos você já deve ter instalado o Apache Maven e o Java (jdk).
 
