@@ -22,6 +22,7 @@ import com.example.duckfarm.shared.dto.input.CreateCustomerDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @Validated
 @RestController
@@ -63,7 +64,7 @@ public class CustomerController {
 
     @PutMapping("{id}")
     @Operation(summary = "Update a Customer", description = "Updates a customer by id.")
-    public ResponseEntity<Customer> update(@PathVariable Long id, @RequestBody CreateCustomerDTO payload) {
+    public ResponseEntity<Customer> update(@PathVariable Long id, @RequestBody @Valid CreateCustomerDTO payload) {
         try {
             Customer customerUpdated = customerService.update(id, payload);
             return new ResponseEntity<>(customerUpdated, HttpStatus.OK);

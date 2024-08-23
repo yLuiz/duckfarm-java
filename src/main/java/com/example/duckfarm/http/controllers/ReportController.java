@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.duckfarm.db.model.Duck;
@@ -43,9 +44,13 @@ public class ReportController {
     private DuckService duckService;
 
     @GetMapping("excel/download")
-    public ResponseEntity<byte[]> downloadExcel() throws IOException {
+    public ResponseEntity<byte[]> downloadExcel(
+        @RequestParam(value = "size", required = false) Integer size
+    ) throws IOException {
 
-        Page<Duck> duckPage = duckService.findAll(0, 10);
+        size = size == null ? 10 : size;
+
+        Page<Duck> duckPage = duckService.findAll(0, size);
 
         List<Duck> ducks = duckPage.getContent();
 

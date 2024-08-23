@@ -22,6 +22,7 @@ import com.example.duckfarm.shared.dto.output.PurchaseResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @Validated
 @RestController
@@ -35,7 +36,7 @@ public class PurchaseController {
 
     @PostMapping()
     @Operation(summary = "Create Purchase", description = "Creates a new purchase.")
-    public ResponseEntity<PurchaseResponseDTO> create(@RequestBody CreatePurchaseDTO payload) {
+    public ResponseEntity<PurchaseResponseDTO> create(@RequestBody @Valid CreatePurchaseDTO payload) {
         return new ResponseEntity<>(purchaseService.create(payload), HttpStatus.CREATED);
     }
 

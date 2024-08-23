@@ -41,7 +41,7 @@ public class DuckController {
     @PostMapping
     @Operation(summary = "Create Duck", description = "Creates a new duck.")
     public ResponseEntity<Duck> create(
-        @Valid @RequestBody CreateDuckDTO body
+        @RequestBody @Valid CreateDuckDTO body
     ) {
 
         Duck duck = duckService.create(body);
@@ -92,7 +92,7 @@ public class DuckController {
     
     @PutMapping("{id}")
     @Operation(summary = "Update Duck by Id", description = "Updates a duck by id.")
-    public ResponseEntity<Duck> update(@PathVariable("id") Long id, @Valid @RequestBody CreateDuckDTO body) {
+    public ResponseEntity<Duck> update(@PathVariable("id") Long id, @RequestBody @Valid CreateDuckDTO body) {
         try {
             Duck duckUpdated = duckService.update(id, body);
 
