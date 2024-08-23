@@ -65,7 +65,7 @@ public class DuckController {
     }
 
     @GetMapping("{id}")
-    @Operation(summary = "Get One Duck by Id", description = "Returns a list of ducks registered.")
+    @Operation(summary = "Get One Duck by Id", description = "Returns a duck by id.")
     public ResponseEntity<DuckResponseDTO> getById(@PathVariable("id") Long id) {
 
         try {

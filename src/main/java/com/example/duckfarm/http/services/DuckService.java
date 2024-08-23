@@ -56,8 +56,11 @@ public class DuckService {
     }
 
     public Duck findById(Long id) {
-        Optional<Duck> duckExists = duckRepository.findById(id);
-        return duckExists.orElse(null);
+        Optional<Duck> duck = duckRepository.findById(id);
+        if (duck.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pato não foi encontrado.");
+        }
+        return duck.orElse(null);
     }
 
     public Page<Duck> getAll(int page, int size) {
