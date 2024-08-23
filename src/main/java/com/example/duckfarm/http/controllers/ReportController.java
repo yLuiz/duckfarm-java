@@ -21,12 +21,14 @@ import com.example.duckfarm.http.services.DuckService;
 import com.example.duckfarm.http.services.ExcelReportService;
 import com.example.duckfarm.http.services.PdfReportService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import net.sf.jasperreports.engine.JRException;
 
 @Validated
 @RestController
 @RequestMapping("report")
+@SecurityRequirement(name = "bearerAuth")
 @Tag(name = "Reports Controller", description = "Endpoints to make operations about reports.")
 public class ReportController {
 

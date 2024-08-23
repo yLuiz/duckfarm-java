@@ -23,12 +23,14 @@ import com.example.duckfarm.shared.dto.input.CreateDuckDTO;
 import com.example.duckfarm.shared.dto.output.DuckResponseDTO;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @Validated
 @RestController
 @RequestMapping("duck")
+@SecurityRequirement(name = "bearerAuth")
 @Tag(name = "Duck Controller", description = "Endpoints to make operations about ducks.")
 public class DuckController {
 

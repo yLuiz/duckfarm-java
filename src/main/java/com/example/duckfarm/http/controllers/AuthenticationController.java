@@ -14,13 +14,15 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.example.duckfarm.db.model.Customer;
 import com.example.duckfarm.http.services.CustomerService;
+import com.example.duckfarm.http.services.TokenService;
 import com.example.duckfarm.shared.dto.input.AuthenticationDTO;
 import com.example.duckfarm.shared.dto.input.CreateCustomerDTO;
+import com.example.duckfarm.shared.dto.output.LoginResponseDTO;
+import com.example.duckfarm.shared.dto.output.ResponseError;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Null;
 
 @Validated
 @RestController
@@ -34,25 +36,30 @@ public class AuthenticationController {
     @Autowired
     private CustomerService customerService;
 
-    @PostMapping
-    @Operation(summary = "Make authentication", description = "Get token to make requests.")
-    public ResponseEntity<Null> authenticate(@RequestBody @Valid AuthenticationDTO payload) {
+    @Autowired
+    private TokenService tokenService;
 
-        var emailPassword = new UsernamePasswordAuthenticationToken(payload.getEmail(), payload.getPassword()); 
+    @PostMapping("login")
+    @Operation(summary = "Make authentication", description = "Get token to make requests.")
+    public ResponseEntity<LoginResponseDTO> authenticate(@RequestBody @Valid AuthenticationDTO payload) {
+
+        var emailPassword = new UsernamePasswordAuthenticationToken(payload.getEmail(), payload.getPassword());
         var auth = authenticationManager.authenticate(emailPassword);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        var token = tokenService.generateToken((Customer) auth.getPrincipal());
+
+        return new ResponseEntity<>(new LoginResponseDTO(token), HttpStatus.OK);
     }
 
     @PostMapping("register")
     @Operation(summary = "Create Customer", description = "Creates a new customer.")
-    public ResponseEntity<Customer> create(@RequestBody CreateCustomerDTO payload) {
+    public ResponseEntity<?> create(@RequestBody @Valid CreateCustomerDTO payload) {
         try {
             return new ResponseEntity<>(customerService.create(payload), HttpStatus.CREATED);
         } catch (ResponseStatusException e) {
-            throw new ResponseStatusException(e.getStatusCode(), e.getReason());
+            return new ResponseEntity<>(new ResponseError(e.getReason(), e.getStatusCode()), e.getStatusCode());
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(new ResponseError(e.getMessage(),  HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
         }
     }
 

@@ -20,11 +20,13 @@ import com.example.duckfarm.shared.dto.input.CreatePurchaseDTO;
 import com.example.duckfarm.shared.dto.output.PurchaseResponseDTO;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Validated
 @RestController
 @RequestMapping("purchase")
+@SecurityRequirement(name = "bearerAuth")
 @Tag(name = "Purchase Controller", description = "Endpoints to make operations about purchases.")
 public class PurchaseController {
 

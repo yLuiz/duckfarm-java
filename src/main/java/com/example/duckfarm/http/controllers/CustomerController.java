@@ -20,11 +20,13 @@ import com.example.duckfarm.http.services.CustomerService;
 import com.example.duckfarm.shared.dto.input.CreateCustomerDTO;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Validated
 @RestController
 @RequestMapping("customer")
+@SecurityRequirement(name = "bearerAuth")
 @Tag(name = "Customer Controller", description = "Endpoints to make operations about customers.")
 public class CustomerController {
 
