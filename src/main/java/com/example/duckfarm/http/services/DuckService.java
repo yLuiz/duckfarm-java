@@ -63,7 +63,7 @@ public class DuckService {
         return duck.orElse(null);
     }
 
-    public Page<Duck> getAll(int page, int size) {
+    public Page<Duck> findAll(int page, int size) {
 
         PageRequest pageRequest = PageRequest.of(
                 page,

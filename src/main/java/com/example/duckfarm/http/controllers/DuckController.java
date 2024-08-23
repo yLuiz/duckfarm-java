@@ -58,7 +58,7 @@ public class DuckController {
             size = 10;
         }
 
-        Page<Duck> ducks = duckService.getAll(page, size);
+        Page<Duck> ducks = duckService.findAll(page, size);
         Page<DuckResponseDTO> ducksResponse = ducks.map(DuckResponseDTO::new);
 
         return ducksResponse;
