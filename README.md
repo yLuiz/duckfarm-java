@@ -14,56 +14,57 @@ Para baixar e executar o sistema, faça download com os seguintes comandos:
 
 # 💻 Tecnologias
 * Java (v17.0)
+* Apache Maven (v3.9.9)
 * Spring Boot (v3.0.0)
 * PostgreSQL (v15.3)
+* Flyway
 
 ## ⚙ Configuração
-Para conseguir rodar o Backe-end, você precisa ter instalado o Node.js na versão 20.16.0 em sua máquina.
+Para conseguir rodar o Backe-end, você precisa ter instalado o Java (jdk) na versão 17.0.11+ e o Apache Maven 3.9.9+ em sua máquina.
 Após isso, clone o repositório e execute os seguintes passos:
 
 # Banco de dados 🎲
-- Primeiramente, você precisa ter o banco de dados MySQL, caso queira subir em um docker, execute o seguinte comando:
+
+- Caso tenha você utilize o docker, siga os seguintes passos:
+
+- Entre no arquivo docker-compose-db.yml e altere os campos ``` POSTGRES_USER: your_user ``` e ```POSTGRES_PASSWORD: your_password ``` para as suas credências de preferência.
+- Após isso, você precisa ter o banco de dados PostgreSQL, execute o seguinte comando:
 ``` bash
-    $ docker run -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=ecommerce -e MYSQL_USER=main -e MYSQL_PASSWORD=root mysql:8
+    $ docker-compose -f docker-compose-db.yml up -d
 ```
 
-- Em seguida, verifique o arquivo .env da sua aplicação, ele deve contar duas variaveis:
+- Em seguida, verifique o arquivo application.properties da sua aplicação que se encontra na pasta resources e certifique de alterar os URLs e credencias de conexão do Banco de dados:
 ``` bash
-    DATABASE_URL="mysql://root:root@localhost:3306/ecommerce?createDatabaseIfNotExist=true&schema=public"
-    JWT_SECRET="your_secret_key
+    spring.datasource.url=${DB_URL:jdbc:postgresql://localhost:5432/duckfarm?createDatabaseIfNotExists=true}
+    spring.datasource.username=${DB_USERNAME:your_user}
+    spring.datasource.password=${DB_PASSWORD:your_password}
 ```
 
-- Rode o comando:
+- Se você quiser configurar variáveis de ambiente na sua IDE, fique a vontade, as váriaveis são:
 ``` bash
-    $ npm install
+    DB_URL=jdbc:postgresql://localhost:5432/your_database
+    DB_USERNAME=your_user
+    DB_PASSWORD=your_password
 ```
 
-- Será necessário executar as entidades via Prisma para que as colunas no banco de dados sejam gerados, para isso rode:
-``` bash
-    $ npx prisma db push
-```
-- Caso comando acima não seja executado com sucesso, tente executar o seguinte:
-``` bash
-    $ npx prisma migrate deploy
-```
+*Obs: Caso não tenha o docker, certifique de baixar e fazer a instação do PostgreSQL 13.
 
-- Após o comando executar com sucesso, execute o próximo comando:
+- Agora, vale lembrar que para seguir os próximos passos você já deve ter instalado o Apache Maven e o Java (jdk).
+
+- Ao entrar no diretório da aplicação, execute o seguinte comando caso sua IDE não instale automaticamente os pacotes necessários.
+
 ``` bash
-$ npx prisma generate
-```
-- Feito os passos para executar o banco, agora é necessário popular alguns dados de Categoria, então rode o seguinte comando:
- ``` bash
-$ npx prisma db seed
+    $ mvn clean
+    $ mvn package
 ```
 
 ## 🚀 Executando (Sem o Docker)
-Após a configurção, execute o seguinte comando:
-
+Após a configurção, rode a aplicação pela sua IDE. 
+Mas caso queira rodar o build da aplicação, execute o seguinte comando:
 ``` bash
-$ npm run start:dev
+$ java -jar duckfarm-0.0.1-SNAPSHOT.jar
 ```
 
-## Obs: problemas com docker-compose
 ## 🚀 Executando (Com o Docker)
 Caso não queira ter problemas com ambiente, rode os seguintes comando docker:
 
@@ -73,9 +74,7 @@ $ docker-compose up -d
 ```
 
 ## 🔀 Rotas
-Para saber quais as rotas existentes, acesse: `https://localhost:3000/api/`.
-- Vale lembrar que o swagger só irá funcionar em ambiente de desenvolvimento.
-
+Para saber quais as rotas existentes, acesse: `http://localhost:8085/swagger-ui.html`. (IMPORTANTE! sem barra no final)
 # Considerações
 --
 # Observações
