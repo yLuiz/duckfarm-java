@@ -17,8 +17,8 @@ import com.example.duckfarm.db.model.Customer;
 import com.example.duckfarm.db.model.Duck;
 import com.example.duckfarm.db.model.Purchase;
 import com.example.duckfarm.db.repositories.PurchaseRepository;
-import com.example.duckfarm.shared.dto.input.CreateDuckDTO;
 import com.example.duckfarm.shared.dto.input.CreatePurchaseDTO;
+import com.example.duckfarm.shared.dto.input.UpdateDuckDTO;
 import com.example.duckfarm.shared.dto.output.PurchaseResponseDTO;
 import com.example.duckfarm.shared.utils.MathRound;
 
@@ -60,8 +60,7 @@ public class PurchaseService {
             Purchase newPurchase = purchaseRepository.save(purchase);
 
             if (newPurchase != null) {
-
-                CreateDuckDTO duckDTO = new CreateDuckDTO();
+                UpdateDuckDTO duckDTO = new UpdateDuckDTO();
                 duckDTO.setCustomer_id(customer.getId());
                 duckService.update(duck.getId(), duckDTO);
             }

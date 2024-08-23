@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.example.duckfarm.db.model.Customer;
 import com.example.duckfarm.http.services.CustomerService;
 import com.example.duckfarm.shared.dto.input.CreateCustomerDTO;
+import com.example.duckfarm.shared.dto.output.ResponseError;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -49,46 +50,46 @@ public class CustomerController {
 
     @GetMapping("{id}")
     @Operation(summary = "Get a Customer by id", description = "Returns a customer by id.")
-    public ResponseEntity<Customer> findById(@PathVariable Long id) {
+    public ResponseEntity<Object> findById(@PathVariable Long id) {
         try {
             Customer customer = customerService.findById(id);
 
             return new ResponseEntity<>(customer, HttpStatus.OK);
         }
         catch (ResponseStatusException e) {
-            throw new ResponseStatusException(e.getStatusCode(), e.getReason());
+            return new ResponseEntity<>(new ResponseError(e.getReason(), e.getStatusCode()), e.getStatusCode());
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            return new ResponseEntity<>(new ResponseError(e.getMessage(),  HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
         }
     }
 
     @PutMapping("{id}")
     @Operation(summary = "Update a Customer", description = "Updates a customer by id.")
-    public ResponseEntity<Customer> update(@PathVariable Long id, @RequestBody @Valid CreateCustomerDTO payload) {
+    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody @Valid CreateCustomerDTO payload) {
         try {
             Customer customerUpdated = customerService.update(id, payload);
             return new ResponseEntity<>(customerUpdated, HttpStatus.OK);
         }
         catch (ResponseStatusException e) {
-            throw new ResponseStatusException(e.getStatusCode(), e.getReason());
+            return new ResponseEntity<>(new ResponseError(e.getReason(), e.getStatusCode()), HttpStatus.BAD_REQUEST);
         }
         catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(new ResponseError(e.getMessage(),  HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("{id}")
     @Operation(summary = "Delete a Customer", description = "Delete a customer by id.")
-    public ResponseEntity<Customer> delete(@PathVariable Long id) {
+    public ResponseEntity<Object> delete(@PathVariable Long id) {
         try {
             Customer customerUpdated = customerService.delete(id);
             return new ResponseEntity<>(customerUpdated, HttpStatus.OK);
         }
         catch (ResponseStatusException e) {
-            throw new ResponseStatusException(e.getStatusCode(), e.getReason());
+            return new ResponseEntity<>(new ResponseError(e.getReason(), e.getStatusCode()), e.getStatusCode());
         }
         catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(new ResponseError(e.getMessage(),  HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);        
         }
         
     }

@@ -17,6 +17,7 @@ import com.example.duckfarm.db.model.Customer;
 import com.example.duckfarm.db.model.Duck;
 import com.example.duckfarm.db.repositories.DuckRepository;
 import com.example.duckfarm.shared.dto.input.CreateDuckDTO;
+import com.example.duckfarm.shared.dto.input.UpdateDuckDTO;
 
 @Service
 public class DuckService {
@@ -79,7 +80,7 @@ public class DuckService {
         return ducks;
     }
 
-    public Duck update(Long id, CreateDuckDTO payload) {
+    public Duck update(Long id, UpdateDuckDTO payload) {
         try {
             Duck duck = findById(id);
 

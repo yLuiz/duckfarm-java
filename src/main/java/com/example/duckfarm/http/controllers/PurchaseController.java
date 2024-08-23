@@ -18,6 +18,7 @@ import com.example.duckfarm.db.model.Purchase;
 import com.example.duckfarm.http.services.PurchaseService;
 import com.example.duckfarm.shared.dto.input.CreatePurchaseDTO;
 import com.example.duckfarm.shared.dto.output.PurchaseResponseDTO;
+import com.example.duckfarm.shared.dto.output.ResponseError;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -36,22 +37,29 @@ public class PurchaseController {
 
     @PostMapping()
     @Operation(summary = "Create Purchase", description = "Creates a new purchase.")
-    public ResponseEntity<PurchaseResponseDTO> create(@RequestBody @Valid CreatePurchaseDTO payload) {
-        return new ResponseEntity<>(purchaseService.create(payload), HttpStatus.CREATED);
+    public ResponseEntity<Object> create(@RequestBody @Valid CreatePurchaseDTO payload) {
+        try {
+            return new ResponseEntity<>(purchaseService.create(payload), HttpStatus.CREATED);
+        }
+        catch (ResponseStatusException e) {
+            return new ResponseEntity<>(new ResponseError(e.getReason(), e.getStatusCode()), e.getStatusCode());
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ResponseError(e.getMessage(), HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("{id}")
     @Operation(summary = "Get One Purchase by Id", description = "Returns a purchase by id.")
-    public ResponseEntity<PurchaseResponseDTO> getById(@PathVariable("id") Long id) {
+    public ResponseEntity<Object> getById(@PathVariable("id") Long id) {
 
         try {
             Purchase purchase = purchaseService.findById(id);
 
             return new ResponseEntity<>(new PurchaseResponseDTO(purchase), HttpStatus.OK);
         } catch (ResponseStatusException e) {
-            throw new ResponseStatusException(e.getStatusCode(), e.getReason());
+            return new ResponseEntity<>(new ResponseError(e.getReason(), e.getStatusCode()), e.getStatusCode());
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(new ResponseError(e.getMessage(), HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
         }
     }
 

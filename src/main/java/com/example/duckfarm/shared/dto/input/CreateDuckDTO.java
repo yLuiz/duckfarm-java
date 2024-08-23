@@ -23,10 +23,10 @@ public class CreateDuckDTO {
     @NotNull(message = "Campo preço não pode ser nulo.")
     private Double price;
 
-    @Schema(example = "1")
+    @Schema(example = "1", hidden=true)
     private Long customer_id;
     
-    @Schema(example = "1", required = true)
+    @Schema(example = "1")
     private Long mother_id;
 
     
