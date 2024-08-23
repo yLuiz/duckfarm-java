@@ -24,9 +24,7 @@ public class PdfReportService {
     @Autowired
     private DuckService duckService;
 
-    public void export() throws FileNotFoundException, JRException {
-
-        String path = System.getProperty("user.dir") + "\\pdf-report.pdf";
+    public byte[] export() throws FileNotFoundException, JRException {
 
         Page<Duck> ducks = duckService.findAll(0, 10);
         File file = ResourceUtils.getFile("classpath:templates/pdf-report.jrxml");
@@ -36,6 +34,6 @@ public class PdfReportService {
         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(ducks.getContent());
         JasperPrint print = JasperFillManager.fillReport(report, null, dataSource);
 
-        JasperExportManager.exportReportToPdfFile(print, path);
+        return JasperExportManager.exportReportToPdf(print);
     }
 }

@@ -21,6 +21,7 @@ import com.example.duckfarm.http.services.DuckService;
 import com.example.duckfarm.http.services.ExcelReportService;
 import com.example.duckfarm.http.services.PdfReportService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import net.sf.jasperreports.engine.JRException;
@@ -71,8 +72,10 @@ public class ReportController {
                 .body(in.readAllBytes());
     }
 
+    // Funcionalidade nãok implementada.
     @GetMapping("pdf/download")
-    public void downloadPdf() throws IOException, FileNotFoundException, JRException {
-        pdfService.export();
+    @Operation(hidden=true)
+    public byte[] downloadPdf() throws IOException, FileNotFoundException, JRException {
+        return pdfService.export();
     }
 }
