@@ -35,7 +35,7 @@ Após isso, clone o repositório e execute os seguintes passos:
 
 - Em seguida, verifique o arquivo application.properties da sua aplicação que se encontra na pasta resources e certifique de alterar os URLs e credencias de conexão do Banco de dados:
 ``` bash
-    spring.datasource.url=${DB_URL:jdbc:postgresql://localhost:5432/duckfarm?createDatabaseIfNotExists=true}
+    spring.datasource.url=${DB_URL:jdbc:postgresql://localhost:5432/your_database?createDatabaseIfNotExists=true}
     spring.datasource.username=${DB_USERNAME:your_user}
     spring.datasource.password=${DB_PASSWORD:your_password}
 ```
