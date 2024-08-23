@@ -3,10 +3,11 @@ package com.example.duckfarm.http.controllers;
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.duckfarm.db.model.Duck;
+import com.example.duckfarm.http.services.DuckService;
 import com.example.duckfarm.http.services.ExcelReportService;
 import com.example.duckfarm.http.services.PdfReportService;
 
@@ -33,18 +36,32 @@ public class ReportController {
     @Autowired
     private PdfReportService pdfService;
 
+    @Autowired
+    private DuckService duckService;
+
     @GetMapping("excel/download")
     public ResponseEntity<byte[]> downloadExcel() throws IOException {
-        // Exemplo de dados
-        List<String[]> data = Arrays.asList(
-                new String[]{"Data1", "Data2", "Data3", "Data1", "Data2"},
-                new String[]{"Data4", "Data5", "Data6", "Data4", "Data5"}
-        );
+
+        Page<Duck> duckPage = duckService.findAll(0, 10);
+
+        List<Duck> ducks = duckPage.getContent();
+
+        List<String[]> data = new ArrayList<>();
+        for (Duck d : ducks) {
+
+            String customerName = d.getCustomer() != null ? d.getCustomer().getName() : "-";
+            String sellValue = d.getPurchase() != null ? ("R$   " + d.getPurchase().getPrice().toString()) : "-";
+            String customerHasDiscount = d.getCustomer() != null ? (d.getCustomer().getHas_discount() == 1 ? "com Desconto" : "sem Desconto") : "-";
+            String duckName = d.getMother() != null ?  "[Mãe] " + d.getMother().getName() + " - " + d.getName() : d.getName();
+            String isAvailable = d.getCustomer() != null ? "Vendido" : "Disponível";
+
+            data.add(new String[]{duckName, isAvailable, customerName, customerHasDiscount, sellValue});
+        }
 
         ByteArrayInputStream in = excelService.generateExcel(data);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Disposition", "attachment; filename=example.xlsx");
+        headers.add("Content-Disposition", "attachment; filename=duck-reports.xlsx");
 
         return ResponseEntity.ok()
                 .headers(headers)
@@ -55,6 +72,5 @@ public class ReportController {
     @GetMapping("pdf/download")
     public void downloadPdf() throws IOException, FileNotFoundException, JRException {
         pdfService.export();
-        return;
     }
 }

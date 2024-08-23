@@ -40,7 +40,8 @@ public class PurchaseService {
             Customer customer = customerService.findById(payload.getCustomer_id());
             Duck duck = duckService.findById(payload.getDuck_id());
 
-            if (Objects.equals(payload.getCustomer_id(), duck.getCustomer().getId())) {
+            Long duckCustomerId = duck.getCustomer() != null ? duck.getCustomer().getId() : null;
+            if (Objects.equals(payload.getCustomer_id(), duckCustomerId)) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Você não pode comprar seu próprio pato.");
             }
 

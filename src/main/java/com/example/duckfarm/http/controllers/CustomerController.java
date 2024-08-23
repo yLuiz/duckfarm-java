@@ -8,7 +8,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,18 +30,6 @@ public class CustomerController {
 
     @Autowired
     private CustomerService customerService;
-
-    @PostMapping()
-    @Operation(summary = "Create Customer", description = "Creates a new customer.")
-    public ResponseEntity<Customer> create(@RequestBody CreateCustomerDTO payload) {
-        try {
-            return new ResponseEntity<>(customerService.create(payload), HttpStatus.CREATED);
-        } catch (ResponseStatusException e) {
-            throw new ResponseStatusException(e.getStatusCode(), e.getReason());
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        }
-    }
 
     @GetMapping()
     @Operation(summary = "Get All Customers", description = "Returns a list of customers registered.")

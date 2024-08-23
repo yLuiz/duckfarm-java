@@ -31,9 +31,12 @@ public class DuckService {
         Duck duck = new Duck(payload);
 
         try {
-            Customer customer = customerService.findById(payload.getCustomer_id());
 
-            duck.setCustomer(customer);
+            if (payload.getCustomer_id() != null) {
+                Customer customer = customerService.findById(payload.getCustomer_id());
+
+                duck.setCustomer(customer);
+            }
 
             if (payload.getMother_id() == null) {
                 return duckRepository.save(duck);
@@ -85,7 +88,8 @@ public class DuckService {
             }
 
             Boolean customerNotNull = payload.getCustomer_id() != null;
-            Boolean sameCustomer = customerNotNull && Objects.equals(duck.getCustomer().getId(), payload.getCustomer_id());
+            Long duckCustomerId = duck.getCustomer() != null ? duck.getCustomer().getId() : null;
+            Boolean sameCustomer = customerNotNull && Objects.equals(duckCustomerId, payload.getCustomer_id());
 
             /* Customer */
             if (customerNotNull) {

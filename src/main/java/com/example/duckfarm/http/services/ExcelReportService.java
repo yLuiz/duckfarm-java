@@ -21,7 +21,7 @@ public class ExcelReportService {
     public ByteArrayInputStream generateExcel(List<String[]> data) throws IOException {
         try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 
-            Sheet sheet = workbook.createSheet("Sheet1");
+            Sheet sheet = workbook.createSheet("Duck Report");
 
             CellStyle boldStyle = workbook.createCellStyle();
             Font boldFont = workbook.createFont();
@@ -37,11 +37,22 @@ public class ExcelReportService {
                     "Tipo do cliente",
                     "Valor"
             );
-            for (int i = 0; i < data.get(0).length; i++) {
+
+            for (int i = 0; i < columnNames.size(); i++) {
                 Cell cell = headerRow.createCell(i);
 
                 cell.setCellValue(columnNames.get(i));
                 cell.setCellStyle(boldStyle);
+            }
+
+            if (data.isEmpty()) {
+                // Ajustar a largura das colunas automaticamente
+                for (int i = 0; i < columnNames.size(); i++) {
+                    sheet.autoSizeColumn(i);
+                }
+
+                workbook.write(out);
+                return new ByteArrayInputStream(out.toByteArray());
             }
 
             // Preenchendo os dados

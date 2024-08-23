@@ -1,7 +1,11 @@
 package com.example.duckfarm.db.model;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.duckfarm.shared.dto.input.CreateCustomerDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -30,7 +34,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "customer")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
-public class Customer {
+public class Customer implements UserDetails {
 
     public Customer (CreateCustomerDTO createCustomerDTO) {
         this.name = createCustomerDTO.getName();
@@ -77,4 +81,14 @@ public class Customer {
 
     @OneToOne(mappedBy = "customer")
     private Purchase purchase;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
 }

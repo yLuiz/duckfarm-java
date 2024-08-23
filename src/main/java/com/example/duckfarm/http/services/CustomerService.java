@@ -8,13 +8,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.duckfarm.db.model.Customer;
 import com.example.duckfarm.db.repositories.CustomerRepository;
 import com.example.duckfarm.shared.dto.input.CreateCustomerDTO;
-import com.example.duckfarm.shared.utils.PasswordHasher;
 
 @Service
 public class CustomerService {
@@ -34,7 +34,7 @@ public class CustomerService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Este email já está em uso.");
         }
 
-        String hashedPassword = PasswordHasher.hashPassword(payload.getPassword());
+        String hashedPassword = new BCryptPasswordEncoder().encode(payload.getPassword());
 
         payload.setPassword(hashedPassword);
         Customer customer = new Customer(payload);
@@ -84,7 +84,7 @@ public class CustomerService {
         }
         
 
-        String hashedPassword = payload.getPassword() != null ? PasswordHasher.hashPassword(payload.getPassword()) : customerExists.get().getPassword();
+        String hashedPassword = payload.getPassword() != null ? new BCryptPasswordEncoder().encode(payload.getPassword()) : customerExists.get().getPassword();
         
         Customer customerGetted = customerExists.get();
         customerGetted.setName(payload.getName() != null ? payload.getName() : customerGetted.getName());

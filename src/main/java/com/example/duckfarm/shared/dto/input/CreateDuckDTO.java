@@ -18,7 +18,7 @@ public class CreateDuckDTO {
     @Schema(example = "209.90", required = true)
     private Double price;
 
-    @Schema(example = "1", required = true)
+    @Schema(example = "1")
     private Long customer_id;
     
     @Schema(example = "1", required = true)
